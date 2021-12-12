@@ -20,6 +20,7 @@ exports.main = (argv, callback) => {
 
             optimize: "O",
             stack: "s",
+            base: "B",
             main: "m",
             define: "D",
 
@@ -28,7 +29,7 @@ exports.main = (argv, callback) => {
             link: "l",
             bare: "b"
         },
-        string: [ "out", "stack", "main", "headers", "include", "link", "define" ],
+        string: [ "out", "stack", "base", "main", "headers", "include", "link", "define" ],
         boolean: [ "debug", "quiet", "optimize", "bare", "internal" ]
     });
 
@@ -46,6 +47,7 @@ exports.main = (argv, callback) => {
             "",
             "  -O, --optimize   Optimizes the output file and removes dead code.",
             "  -s, --stack      Specifies the stack size. Defaults to 10000.",
+            "  -B, --base       Specifies the base address. Defaults to 0 (start of memory).",
             "  -m, --main       Executes the specified function on load.",
             "  -D, --define     Defines a macro.",
             "",
@@ -150,6 +152,7 @@ exports.main = (argv, callback) => {
         temp[temp.index++].name,
         "--import-memory" ,
         argv.bare ? undefined : [ "--allocate-stack", argv.stack || "10000" ],
+        !argv.base ? undefined : [ "--global-base" , argv.base || "0" ],
         [ "--start", argv.main ],
         argv.debug ? "--debug" : undefined,
         "-o", temp[temp.index %= temp.length].name
